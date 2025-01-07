@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157420145617",
+    "project_id": "miles-and-more-clone",
+    "storage_bucket": "miles-and-more-clone.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157420145617:android:3ac29bd004c051f5722ef0",
+        "android_client_info": {
+          "package_name": "com.example.miles_and_more_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUnIWaOCELzbviDP2RHScaD19PvYEc6Vo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
