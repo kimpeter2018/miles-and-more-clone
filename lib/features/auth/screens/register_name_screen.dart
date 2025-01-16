@@ -5,7 +5,7 @@ import 'package:miles_and_more_clone/data_models/user_model.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/page_indicator.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/question_mark_quide.dart';
-import 'package:miles_and_more_clone/root_layout.dart';
+import 'package:miles_and_more_clone/features/welcome_screen.dart';
 
 class RegisterNameScreen extends ConsumerStatefulWidget {
   final String enteredEmail;
@@ -45,25 +45,14 @@ class _RegisterScreenState extends ConsumerState<RegisterNameScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageIndicator(
-              totalPages: 2,
-              currentPage: 1,
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Text(
-              'Your personal details',
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            const SizedBox(
-              height: 40,
-            ),
+            const PageIndicator(totalPages: 2, currentPage: 1),
+            const SizedBox(height: 40),
+            Text('Your personal details',
+                style: Theme.of(context).textTheme.headlineLarge),
+            const SizedBox(height: 40),
             const Text(
                 'Please complete all the fields to register for a Travel ID'),
-            const SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,11 +61,9 @@ class _RegisterScreenState extends ConsumerState<RegisterNameScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Salutation',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
-                      ),
+                      Text('Salutation',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary)),
                       Row(
                         children: <Widget>[
                           Row(
@@ -114,73 +101,57 @@ class _RegisterScreenState extends ConsumerState<RegisterNameScreen> {
                   ),
                 ),
                 const Flexible(
-                    child: QuestionMarkGuide(
-                        guideText:
-                            "The salutations \"Mr\" and \"Ms\" are currently the only options available due to technical reasons. Additional options which will also include other gender identities are in the planning stage.")),
+                  child: QuestionMarkGuide(
+                      guideText:
+                          "The salutations \"Mr\" and \"Ms\" are currently the only options available due to technical reasons. Additional options which will also include other gender identities are in the planning stage."),
+                ),
               ],
             ),
             Container(
               padding: const EdgeInsets.all(10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: ValueListenableBuilder<TextEditingValue>(
-                      valueListenable: firstNameController,
-                      builder: (context, value, child) {
-                        return TextField(
-                          controller: firstNameController,
-                          onTapOutside: (event) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          decoration: const InputDecoration(
-                              border: UnderlineInputBorder(),
-                              labelText: 'First name'),
-                        );
-                      },
+                    child: TextField(
+                      controller: firstNameController,
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'First name',
+                      ),
                     ),
                   ),
                   const QuestionMarkGuide(
                     guideText:
                         "Please give your first name(s) in Roman letters exactly as they are shown on your ID card/passport",
-                  )
+                  ),
                 ],
               ),
             ),
             Container(
               padding: const EdgeInsets.all(10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: ValueListenableBuilder<TextEditingValue>(
-                      valueListenable: surNameController,
-                      builder: (context, value, child) {
-                        return TextField(
-                          controller: surNameController,
-                          onTapOutside: (event) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          decoration: const InputDecoration(
-                              border: UnderlineInputBorder(),
-                              labelText: 'Surname'),
-                        );
-                      },
+                    child: TextField(
+                      controller: surNameController,
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'Surname',
+                      ),
                     ),
                   ),
                   const QuestionMarkGuide(
-                      guideText:
-                          "Please give your surname in Roman letters exactly as it is shown on your ID card/passport")
+                    guideText:
+                        "Please give your surname in Roman letters exactly as it is shown on your ID card/passport",
+                  ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            const SizedBox(height: 15),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () async {
+                onPressed: () {
                   final firstName = firstNameController.text;
                   final surName = surNameController.text;
                   if (firstName.isNotEmpty && surName.isNotEmpty) {
@@ -191,26 +162,16 @@ class _RegisterScreenState extends ConsumerState<RegisterNameScreen> {
                           surName: surName,
                           gender: gender!,
                         );
-                    context.push(RootLayout.routeName);
+                    Navigator.of(context).popUntil((route) =>
+                        route.settings.name == WelcomeScreen.routeName);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Please enter all fields')),
                     );
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.onPrimaryContainer,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 14.0),
-                ),
                 child: const Text('Register'),
               ),
-            ),
-            const SizedBox(
-              height: 15,
             ),
           ],
         ),

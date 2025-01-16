@@ -72,6 +72,14 @@ class AuthRepository {
     }
   }
 
+  Future<bool> isEmailInUse(String email) async {
+    final querySnapshot = await _firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    return querySnapshot.docs.isNotEmpty;
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
   }

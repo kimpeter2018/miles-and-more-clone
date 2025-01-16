@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/password_textfield.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/question_mark_quide.dart';
+import 'package:miles_and_more_clone/features/welcome_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static const String routeName = '/login-screen';
@@ -17,6 +18,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isEmailSubmitted = false;
+  String? emailError;
+  String? passwordError;
 
   @override
   void dispose() {
@@ -67,14 +70,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
                           decoration: InputDecoration(
-                              border: const UnderlineInputBorder(),
-                              labelText: (emailController.value.text.isEmpty)
-                                  ? 'Travel ID (email address) / Servicecard number'
-                                  // email validating expression
-                                  : RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                          .hasMatch(emailController.text)
-                                      ? 'Email'
-                                      : 'Username'),
+                            border: const UnderlineInputBorder(),
+                            labelText: (emailController.value.text.isEmpty)
+                                ? 'Travel ID (email address) / Servicecard number'
+                                // email validating expression
+                                : RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        .hasMatch(emailController.text)
+                                    ? 'Email'
+                                    : 'Username',
+                            errorText: emailError,
+                          ),
                         );
                       },
                     ),
@@ -94,6 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     Expanded(
                       child: ObscureTextField(
+                        error: passwordError,
                         controller: passwordController,
                       ),
                     ),
@@ -124,25 +130,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () async {
+                onPressed: () {
+                  setState(() {
+                    emailError = emailController.text.isEmpty
+                        ? 'Please enter your email'
+                        : null;
+                    if (isEmailSubmitted && passwordController.text.isEmpty) {
+                      passwordError = 'Please enter your password';
+                    } else if (passwordController.text.length < 8) {
+                      passwordError =
+                          'Password needs to be longer than 8 characters';
+                    } else {
+                      passwordError = null;
+                    }
+                  });
+
                   if (!isEmailSubmitted && emailController.text.isNotEmpty) {
                     setState(() {
                       isEmailSubmitted = true;
                     });
-                  } else {
-                    final email = emailController.text;
-                    final password = passwordController.text;
-                    if (email.isNotEmpty && password.isNotEmpty) {
-                      ref.read(authControllerProvider.notifier).login(
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
-                          );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Please enter all fields')),
-                      );
-                    }
+                  } else if (emailError == null && passwordError == null) {
+                    ref.read(authControllerProvider.notifier).login(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                        );
+                    Navigator.of(context).popUntil((route) =>
+                        route.settings.name == WelcomeScreen.routeName);
                   }
                 },
                 style: ElevatedButton.styleFrom(
