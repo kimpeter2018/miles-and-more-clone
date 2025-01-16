@@ -32,6 +32,10 @@ class AuthController extends StateNotifier<AsyncValue<UserModel?>> {
     }
   }
 
+  Future<bool> checkEmailInUse(String email) async {
+    return await _authRepository.isEmailInUse(email);
+  }
+
   Future<void> login({required String email, required String password}) async {
     state = const AsyncValue.loading();
     try {
