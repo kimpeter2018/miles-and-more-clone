@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/screens/login_screen.dart';
 import 'package:miles_and_more_clone/features/auth/screens/register_screen.dart';
+import 'package:miles_and_more_clone/root_layout.dart';
 
 class WelcomeScreen extends ConsumerWidget {
   static const String routeName = '/welcome-screen';
@@ -10,6 +12,23 @@ class WelcomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
+
+    ref.listen(authControllerProvider, (previous, next) {
+      next.whenOrNull(
+        data: (user) {
+          if (user != null) {
+            context.go(RootLayout.routeName);
+          }
+        },
+        error: (error, stackTrace) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $error')),
+          );
+        },
+      );
+    });
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -40,7 +59,7 @@ class WelcomeScreen extends ConsumerWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text('Earn miles and enjoy awards.',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 16,
                               color: Colors.white,
                               fontWeight: FontWeight.bold)),
@@ -49,7 +68,9 @@ class WelcomeScreen extends ConsumerWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width - 30,
                     child: ElevatedButton(
-                      onPressed: () => context.push(LoginScreen.routeName),
+                      onPressed: authState.isLoading
+                          ? null
+                          : () => context.push(LoginScreen.routeName),
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             Theme.of(context).colorScheme.onPrimaryContainer,
@@ -59,16 +80,24 @@ class WelcomeScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(
                             vertical: 14.0, horizontal: 40.0),
                       ),
-                      child: const Text('Login',
-                          style: TextStyle(
-                              fontSize: 16,
+                      child: authState.isLoading
+                          ? const CircularProgressIndicator(
                               color: Colors.white,
-                              fontWeight: FontWeight.bold)),
+                            )
+                          : const Text('Login',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextButton(
-                    onPressed: () => context.push(RegisterScreen.routeName),
+                    onPressed: () async {
+                      await context.push(RegisterScreen.routeName);
+                      ref.read(authControllerProvider.notifier).state =
+                          const AsyncValue.loading();
+                    },
                     child: const Text('Register now',
                         style: TextStyle(
                             fontSize: 16,
