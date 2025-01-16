@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/screens/register_name_screen.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/page_indicator.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/password_textfield.dart';
@@ -17,6 +18,8 @@ class RegisterScreen extends ConsumerStatefulWidget {
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String? emailError;
+  String? passwordError;
 
   @override
   void dispose() {
@@ -69,9 +72,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     onTapOutside: (event) {
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
-                    decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Email address'),
+                    decoration: InputDecoration(
+                        border: const UnderlineInputBorder(),
+                        labelText: 'Email address',
+                        errorText: emailError),
                   );
                 },
               ),
@@ -79,6 +83,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             Container(
               padding: const EdgeInsets.all(10),
               child: ObscureTextField(
+                error: passwordError,
                 controller: passwordController,
               ),
             ),
@@ -94,6 +99,29 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   final isEmail = RegExp(
                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                       .hasMatch(emailController.text);
+                  final isInUse = await ref
+                      .read(authControllerProvider.notifier)
+                      .checkEmailInUse(emailController.text.trim());
+
+                  setState(() {
+                    if (isInUse) {
+                      emailError = 'This email is already in use';
+                    } else if (!isEmail) {
+                      emailError = 'Incorrect email format';
+                    } else {
+                      emailError = null;
+                    }
+                    emailError = !isEmail ? 'Incorrect email format' : null;
+                    if (passwordController.text.isEmpty) {
+                      passwordError = 'Please enter your password';
+                    } else if (passwordController.text.length < 8) {
+                      passwordError =
+                          'Password needs to be longer than 8 characters';
+                    } else {
+                      passwordError = null;
+                    }
+                  });
+
                   if (email.isNotEmpty && password.isNotEmpty && isEmail) {
                     context.pushNamed(RegisterNameScreen.routeName,
                         queryParameters: {

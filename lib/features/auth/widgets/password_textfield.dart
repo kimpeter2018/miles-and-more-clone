@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class ObscureTextField extends StatefulWidget {
   final TextEditingController controller;
-  const ObscureTextField({Key? key, required this.controller})
+  final String? error;
+
+  const ObscureTextField(
+      {Key? key, required this.controller, required this.error})
       : super(key: key);
 
   @override
@@ -22,6 +25,7 @@ class _ObscureTextFieldState extends State<ObscureTextField> {
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
         labelText: 'Password',
+        errorText: widget.error,
         suffixIcon: IconButton(
           icon: Icon(
             _isObscured ? Icons.visibility_off : Icons.visibility,
