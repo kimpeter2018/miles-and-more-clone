@@ -10,9 +10,31 @@ class NewsPage extends ConsumerStatefulWidget {
 
 class _NewsPageState extends ConsumerState<NewsPage> {
   bool _isChallengeExpanded = false;
+  final ScrollController _scrollController = ScrollController();
+  double _appBarOpacity = 1.0;
 
   Future<void> _refreshContent() async {
     await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Add a listener to the scroll controller
+    _scrollController.addListener(() {
+      final offset = _scrollController.offset;
+      setState(() {
+        // Fade away when scrolling down, appear when scrolling up
+        _appBarOpacity = (100 - offset.clamp(0, 100)) / 100;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -20,20 +42,42 @@ class _NewsPageState extends ConsumerState<NewsPage> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refreshContent,
-        child: CustomScrollView(
-          slivers: [
-            const SliverAppBar(
-              pinned: false,
-              floating: true,
-              snap: true,
-              title: Text('Miles & More'),
-              backgroundColor: Colors.blue,
+        child: Stack(
+          children: [
+            // Main content (list of news items)
+            ListView.builder(
+              controller: _scrollController,
+              itemCount: 10,
+              padding: const EdgeInsets.only(
+                  top: 200), // Leave space for the custom app bar
+              itemBuilder: (context, index) => Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ListTile(
+                  title: Text('News Item ${index + 1}'),
+                  subtitle: const Text('Details about this news item.'),
+                ),
+              ),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+
+            // Custom floating app bar
+            Opacity(
+              opacity: _appBarOpacity,
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 15),
+                    Text(
+                      'Miles & More',
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                    const SizedBox(height: 15),
                     const Row(
                       children: [
                         Expanded(
@@ -42,9 +86,11 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                               padding: EdgeInsets.all(16.0),
                               child: Column(
                                 children: [
-                                  Text('Mileage Points',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                    'Mileage Points',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                   SizedBox(height: 8),
                                   Text('12,345'),
                                 ],
@@ -59,9 +105,11 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                               padding: EdgeInsets.all(16.0),
                               child: Column(
                                 children: [
-                                  Text('Qualifying Points',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                    'Qualifying Points',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                   SizedBox(height: 8),
                                   Text('678'),
                                 ],
@@ -97,6 +145,9 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                     if (_isChallengeExpanded)
                       Container(
                         width: double.infinity,
+                        constraints: const BoxConstraints(
+                          maxHeight: 100.0,
+                        ),
                         padding: const EdgeInsets.all(16.0),
                         color: Colors.grey[200],
                         child: const Text('Challenge Details Here'),
@@ -112,19 +163,6 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                     ),
                   ],
                 ),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: ListTile(
-                    title: Text('News Item ${index + 1}'),
-                    subtitle: const Text('Details about this news item.'),
-                  ),
-                ),
-                childCount: 10,
               ),
             ),
           ],
