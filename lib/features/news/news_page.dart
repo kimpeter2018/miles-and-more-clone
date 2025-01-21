@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miles_and_more_clone/data_models/news/news_model.dart';
+import 'news_controller.dart';
 
 class NewsPage extends ConsumerStatefulWidget {
   const NewsPage({super.key});
@@ -13,19 +15,12 @@ class _NewsPageState extends ConsumerState<NewsPage> {
   final ScrollController _scrollController = ScrollController();
   double _appBarOpacity = 1.0;
 
-  Future<void> _refreshContent() async {
-    await Future.delayed(const Duration(seconds: 1));
-  }
-
   @override
   void initState() {
     super.initState();
-
-    // Add a listener to the scroll controller
     _scrollController.addListener(() {
       final offset = _scrollController.offset;
       setState(() {
-        // Fade away when scrolling down, appear when scrolling up
         _appBarOpacity = (100 - offset.clamp(0, 100)) / 100;
       });
     });
@@ -39,134 +34,229 @@ class _NewsPageState extends ConsumerState<NewsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: _refreshContent,
-        child: Stack(
-          children: [
-            // Main content (list of news items)
-            ListView.builder(
-              controller: _scrollController,
-              itemCount: 10,
-              padding: const EdgeInsets.only(
-                  top: 200), // Leave space for the custom app bar
-              itemBuilder: (context, index) => Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: ListTile(
-                  title: Text('News Item ${index + 1}'),
-                  subtitle: const Text('Details about this news item.'),
-                ),
-              ),
-            ),
+    final newsState = ref.watch(newsProvider);
 
-            // Custom floating app bar
-            Opacity(
-              opacity: _appBarOpacity,
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 15),
-                    Text(
-                      'Miles & More',
-                      style:
-                          Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Row(
-                      children: [
-                        Expanded(
-                          child: Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Mileage Points',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+    return Scaffold(
+      body: Stack(
+        children: [
+          Opacity(
+            opacity: _appBarOpacity,
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(top: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
+                  Text(
+                    'Miles & More',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 15),
+                  // Summary cards (miles & points)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 1,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          child: const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '12,345 M',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  SizedBox(height: 8),
-                                  Text('12,345'),
-                                ],
-                              ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'Miles',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Qualifying Points',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Card(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          child: const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '678',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  SizedBox(height: 8),
-                                  Text('678'),
-                                ],
-                              ),
+                                ),
+                                Text(
+                                  'Qualifying Points',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  '0',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Points',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isChallengeExpanded = !_isChallengeExpanded;
-                        });
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 16),
-                        color: Colors.grey[300],
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('My Challenge'),
-                            Icon(_isChallengeExpanded
-                                ? Icons.keyboard_arrow_up
-                                : Icons.keyboard_arrow_down),
-                          ],
-                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // My Challenge
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isChallengeExpanded = !_isChallengeExpanded;
+                      });
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
+                      color: Colors.grey[100],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'My Challenge',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Icon(_isChallengeExpanded
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down),
+                        ],
                       ),
                     ),
-                    if (_isChallengeExpanded)
-                      Container(
-                        width: double.infinity,
-                        constraints: const BoxConstraints(
-                          maxHeight: 100.0,
-                        ),
-                        padding: const EdgeInsets.all(16.0),
-                        color: Colors.grey[200],
-                        child: const Text('Challenge Details Here'),
+                  ),
+                  if (_isChallengeExpanded)
+                    Container(
+                      width: double.infinity,
+                      constraints: const BoxConstraints(
+                        maxHeight: 100.0,
                       ),
-                    const SizedBox(height: 16),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Chip(label: Text('Earn Miles')),
-                        SizedBox(width: 8),
-                        Chip(label: Text('Spend Miles')),
-                      ],
+                      padding: const EdgeInsets.all(16.0),
+                      color: Colors.grey[200],
+                      child: const Text('Challenge Details Here'),
                     ),
-                  ],
-                ),
+                  const SizedBox(height: 5),
+                  // Chips
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Chip(
+                        label: const Text('Earn Miles'),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        backgroundColor: Colors.grey[100],
+                      ),
+                      const SizedBox(width: 8),
+                      Chip(
+                        label: const Text('Spend Miles'),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        backgroundColor: Colors.grey[100],
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: newsState.when(
+                      data: (newsList) => RefreshIndicator(
+                        onRefresh: () =>
+                            ref.read(newsProvider.notifier).fetchNews(),
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: newsList.length,
+                          itemBuilder: (context, index) {
+                            final news = newsList[index];
+                            return Card(
+                              margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(8)),
+                                    child: Image.network(
+                                      news.photoUrl,
+                                      height: 200,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Image.network(
+                                        news.logoUrl,
+                                        height: 60,
+                                        width: 60,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Text(
+                                      news.milesType.value,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      news.description,
+                                      style: const TextStyle(fontSize: 14),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      error: (error, _) => Center(child: Text('Error: $error')),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
