@@ -11,7 +11,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       uid: json['uid'] as String,
       email: json['email'] as String,
       points: (json['points'] as num).toInt(),
-      gender: _genderFromJson(json['gender'] as String),
+      gender: $enumDecode(_$GenderEnumMap, json['gender']),
       firstName: json['firstName'] as String,
       surName: json['surName'] as String,
       photoUrl: json['photoUrl'] as String?,
@@ -22,8 +22,13 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'uid': instance.uid,
       'email': instance.email,
       'points': instance.points,
-      'gender': _genderToJson(instance.gender),
+      'gender': _$GenderEnumMap[instance.gender]!,
       'firstName': instance.firstName,
       'surName': instance.surName,
       'photoUrl': instance.photoUrl,
     };
+
+const _$GenderEnumMap = {
+  Gender.mr: 'mr',
+  Gender.ms: 'ms',
+};

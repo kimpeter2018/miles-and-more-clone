@@ -23,7 +23,6 @@ mixin _$UserModel {
   String get uid => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   int get points => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson)
   Gender get gender => throw _privateConstructorUsedError;
   String get firstName => throw _privateConstructorUsedError;
   String get surName => throw _privateConstructorUsedError;
@@ -48,7 +47,7 @@ abstract class $UserModelCopyWith<$Res> {
       {String uid,
       String email,
       int points,
-      @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson) Gender gender,
+      Gender gender,
       String firstName,
       String surName,
       String? photoUrl});
@@ -122,7 +121,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       {String uid,
       String email,
       int points,
-      @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson) Gender gender,
+      Gender gender,
       String firstName,
       String surName,
       String? photoUrl});
@@ -189,7 +188,6 @@ class _$UserModelImpl implements _UserModel {
       {required this.uid,
       required this.email,
       required this.points,
-      @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson)
       required this.gender,
       required this.firstName,
       required this.surName,
@@ -205,7 +203,6 @@ class _$UserModelImpl implements _UserModel {
   @override
   final int points;
   @override
-  @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson)
   final Gender gender;
   @override
   final String firstName;
@@ -261,7 +258,6 @@ abstract class _UserModel implements UserModel {
       {required final String uid,
       required final String email,
       required final int points,
-      @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson)
       required final Gender gender,
       required final String firstName,
       required final String surName,
@@ -277,7 +273,6 @@ abstract class _UserModel implements UserModel {
   @override
   int get points;
   @override
-  @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson)
   Gender get gender;
   @override
   String get firstName;
