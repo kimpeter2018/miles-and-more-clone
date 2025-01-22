@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:miles_and_more_clone/data_models/user_model.dart';
+import 'package:miles_and_more_clone/data_models/user/user_model.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/page_indicator.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/question_mark_quide.dart';

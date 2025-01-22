@@ -22,6 +22,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   String get uid => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  int get miles => throw _privateConstructorUsedError;
+  int get qualifyingPoints => throw _privateConstructorUsedError;
   int get points => throw _privateConstructorUsedError;
   Gender get gender => throw _privateConstructorUsedError;
   String get firstName => throw _privateConstructorUsedError;
@@ -46,6 +48,8 @@ abstract class $UserModelCopyWith<$Res> {
   $Res call(
       {String uid,
       String email,
+      int miles,
+      int qualifyingPoints,
       int points,
       Gender gender,
       String firstName,
@@ -70,6 +74,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   $Res call({
     Object? uid = null,
     Object? email = null,
+    Object? miles = null,
+    Object? qualifyingPoints = null,
     Object? points = null,
     Object? gender = null,
     Object? firstName = null,
@@ -85,6 +91,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      miles: null == miles
+          ? _value.miles
+          : miles // ignore: cast_nullable_to_non_nullable
+              as int,
+      qualifyingPoints: null == qualifyingPoints
+          ? _value.qualifyingPoints
+          : qualifyingPoints // ignore: cast_nullable_to_non_nullable
+              as int,
       points: null == points
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
@@ -120,6 +134,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
   $Res call(
       {String uid,
       String email,
+      int miles,
+      int qualifyingPoints,
       int points,
       Gender gender,
       String firstName,
@@ -142,6 +158,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
   $Res call({
     Object? uid = null,
     Object? email = null,
+    Object? miles = null,
+    Object? qualifyingPoints = null,
     Object? points = null,
     Object? gender = null,
     Object? firstName = null,
@@ -157,6 +175,14 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      miles: null == miles
+          ? _value.miles
+          : miles // ignore: cast_nullable_to_non_nullable
+              as int,
+      qualifyingPoints: null == qualifyingPoints
+          ? _value.qualifyingPoints
+          : qualifyingPoints // ignore: cast_nullable_to_non_nullable
+              as int,
       points: null == points
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
@@ -187,6 +213,8 @@ class _$UserModelImpl implements _UserModel {
   const _$UserModelImpl(
       {required this.uid,
       required this.email,
+      required this.miles,
+      required this.qualifyingPoints,
       required this.points,
       required this.gender,
       required this.firstName,
@@ -201,6 +229,10 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String email;
   @override
+  final int miles;
+  @override
+  final int qualifyingPoints;
+  @override
   final int points;
   @override
   final Gender gender;
@@ -213,7 +245,7 @@ class _$UserModelImpl implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, email: $email, points: $points, gender: $gender, firstName: $firstName, surName: $surName, photoUrl: $photoUrl)';
+    return 'UserModel(uid: $uid, email: $email, miles: $miles, qualifyingPoints: $qualifyingPoints, points: $points, gender: $gender, firstName: $firstName, surName: $surName, photoUrl: $photoUrl)';
   }
 
   @override
@@ -223,6 +255,9 @@ class _$UserModelImpl implements _UserModel {
             other is _$UserModelImpl &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.email, email) || other.email == email) &&
+            (identical(other.miles, miles) || other.miles == miles) &&
+            (identical(other.qualifyingPoints, qualifyingPoints) ||
+                other.qualifyingPoints == qualifyingPoints) &&
             (identical(other.points, points) || other.points == points) &&
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.firstName, firstName) ||
@@ -234,8 +269,8 @@ class _$UserModelImpl implements _UserModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, uid, email, points, gender, firstName, surName, photoUrl);
+  int get hashCode => Object.hash(runtimeType, uid, email, miles,
+      qualifyingPoints, points, gender, firstName, surName, photoUrl);
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -257,6 +292,8 @@ abstract class _UserModel implements UserModel {
   const factory _UserModel(
       {required final String uid,
       required final String email,
+      required final int miles,
+      required final int qualifyingPoints,
       required final int points,
       required final Gender gender,
       required final String firstName,
@@ -270,6 +307,10 @@ abstract class _UserModel implements UserModel {
   String get uid;
   @override
   String get email;
+  @override
+  int get miles;
+  @override
+  int get qualifyingPoints;
   @override
   int get points;
   @override
