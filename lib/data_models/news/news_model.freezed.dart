@@ -20,9 +20,9 @@ News _$NewsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$News {
-  String get photoUrl => throw _privateConstructorUsedError;
-  String get logoUrl => throw _privateConstructorUsedError;
-  MilesType get milesType => throw _privateConstructorUsedError;
+  String? get photoUrl => throw _privateConstructorUsedError;
+  String? get logoUrl => throw _privateConstructorUsedError;
+  String get milesType => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
 
   /// Serializes this News to a JSON map.
@@ -40,9 +40,9 @@ abstract class $NewsCopyWith<$Res> {
       _$NewsCopyWithImpl<$Res, News>;
   @useResult
   $Res call(
-      {String photoUrl,
-      String logoUrl,
-      MilesType milesType,
+      {String? photoUrl,
+      String? logoUrl,
+      String milesType,
       String description});
 }
 
@@ -61,24 +61,24 @@ class _$NewsCopyWithImpl<$Res, $Val extends News>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? photoUrl = null,
-    Object? logoUrl = null,
+    Object? photoUrl = freezed,
+    Object? logoUrl = freezed,
     Object? milesType = null,
     Object? description = null,
   }) {
     return _then(_value.copyWith(
-      photoUrl: null == photoUrl
+      photoUrl: freezed == photoUrl
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      logoUrl: null == logoUrl
+              as String?,
+      logoUrl: freezed == logoUrl
           ? _value.logoUrl
           : logoUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       milesType: null == milesType
           ? _value.milesType
           : milesType // ignore: cast_nullable_to_non_nullable
-              as MilesType,
+              as String,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -95,9 +95,9 @@ abstract class _$$NewsImplCopyWith<$Res> implements $NewsCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String photoUrl,
-      String logoUrl,
-      MilesType milesType,
+      {String? photoUrl,
+      String? logoUrl,
+      String milesType,
       String description});
 }
 
@@ -113,24 +113,24 @@ class __$$NewsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? photoUrl = null,
-    Object? logoUrl = null,
+    Object? photoUrl = freezed,
+    Object? logoUrl = freezed,
     Object? milesType = null,
     Object? description = null,
   }) {
     return _then(_$NewsImpl(
-      photoUrl: null == photoUrl
+      photoUrl: freezed == photoUrl
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      logoUrl: null == logoUrl
+              as String?,
+      logoUrl: freezed == logoUrl
           ? _value.logoUrl
           : logoUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       milesType: null == milesType
           ? _value.milesType
           : milesType // ignore: cast_nullable_to_non_nullable
-              as MilesType,
+              as String,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -152,11 +152,11 @@ class _$NewsImpl implements _News {
       _$$NewsImplFromJson(json);
 
   @override
-  final String photoUrl;
+  final String? photoUrl;
   @override
-  final String logoUrl;
+  final String? logoUrl;
   @override
-  final MilesType milesType;
+  final String milesType;
   @override
   final String description;
 
@@ -202,19 +202,19 @@ class _$NewsImpl implements _News {
 
 abstract class _News implements News {
   const factory _News(
-      {required final String photoUrl,
-      required final String logoUrl,
-      required final MilesType milesType,
+      {required final String? photoUrl,
+      required final String? logoUrl,
+      required final String milesType,
       required final String description}) = _$NewsImpl;
 
   factory _News.fromJson(Map<String, dynamic> json) = _$NewsImpl.fromJson;
 
   @override
-  String get photoUrl;
+  String? get photoUrl;
   @override
-  String get logoUrl;
+  String? get logoUrl;
   @override
-  MilesType get milesType;
+  String get milesType;
   @override
   String get description;
 
