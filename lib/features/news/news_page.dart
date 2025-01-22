@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miles_and_more_clone/data_models/news/news_model.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'news_controller.dart';
 
 class NewsPage extends ConsumerStatefulWidget {
@@ -12,120 +12,135 @@ class NewsPage extends ConsumerStatefulWidget {
 
 class _NewsPageState extends ConsumerState<NewsPage> {
   bool _isChallengeExpanded = false;
-  final ScrollController _scrollController = ScrollController();
-  double _appBarOpacity = 1.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() {
-      final offset = _scrollController.offset;
-      setState(() {
-        _appBarOpacity = (100 - offset.clamp(0, 100)) / 100;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final newsState = ref.watch(newsProvider);
+    final userState = ref.watch(authControllerProvider);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Opacity(
-            opacity: _appBarOpacity,
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.only(top: 40),
+      body: RefreshIndicator(
+        edgeOffset: 300,
+        onRefresh: () async {
+          ref.refresh(newsProvider.notifier).fetchNews();
+          ref.invalidate(authControllerProvider);
+        },
+        child: CustomScrollView(
+          physics:
+              const AlwaysScrollableScrollPhysics(), // Ensure pull-to-refresh works
+          slivers: [
+            SliverAppBar(
+              floating: true,
+              expandedHeight: 200.0,
+              title: const Text('Miles & More'),
+              flexibleSpace: FlexibleSpaceBar(
+                background: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 15),
+                    userState.when(
+                      data: (user) => Row(
+                        children: [
+                          Expanded(
+                            child: Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                              margin: const EdgeInsets.only(left: 8),
+                              elevation: 1,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 90),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${user?.miles} M',
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      const Text(
+                                        'Miles',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                              margin: const EdgeInsets.only(right: 8),
+                              elevation: 1,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 90),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${user?.qualifyingPoints}',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        'Qualifying Points',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${user?.points}',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        'Points',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      error: (error, _) => const Text('Error loading miles'),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 15),
-                  Text(
-                    'Miles & More',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 15),
-                  // Summary cards (miles & points)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Card(
-                          elevation: 1,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          child: const Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '12,345 M',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  'Miles',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Card(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          child: const Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '678',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'Qualifying Points',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  '0',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'Points',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // My Challenge
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -162,7 +177,6 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('Challenge Details Here'),
                     ),
                   const SizedBox(height: 5),
-                  // Chips
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -183,80 +197,91 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: newsState.when(
-                      data: (newsList) => RefreshIndicator(
-                        onRefresh: () =>
-                            ref.read(newsProvider.notifier).fetchNews(),
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount: newsList.length,
-                          itemBuilder: (context, index) {
-                            final news = newsList[index];
-                            return Card(
-                              margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                        top: Radius.circular(8)),
-                                    child: Image.network(
-                                      news.photoUrl,
-                                      height: 200,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Image.network(
-                                        news.logoUrl,
-                                        height: 60,
-                                        width: 60,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Text(
-                                      news.milesType.value,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      news.description,
-                                      style: const TextStyle(fontSize: 14),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      error: (error, _) => Center(child: Text('Error: $error')),
-                    ),
-                  ),
                 ],
               ),
             ),
-          ),
-        ],
+            newsState.when(
+              data: (newsList) => SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final news = newsList[index];
+                    return Card(
+                      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          (news.photoUrl != null)
+                              ? ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.zero),
+                                  child: Image.network(
+                                    news.photoUrl!,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.zero),
+                                  child: Image.asset(
+                                    'assets/images/default_news.jpg',
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                          if (news.logoUrl != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8.0),
+                              child: Image.network(
+                                news.logoUrl!,
+                                height: 60,
+                                width: 60,
+                              ),
+                            ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8.0),
+                            child: Text(
+                              news.milesType,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8.0),
+                            child: Text(
+                              news.description,
+                              style: const TextStyle(fontSize: 14),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    );
+                  },
+                  childCount: newsList.length,
+                ),
+              ),
+              loading: () => const SliverToBoxAdapter(
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              error: (error, _) => SliverToBoxAdapter(
+                child: Center(child: Text('Error: $error')),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
