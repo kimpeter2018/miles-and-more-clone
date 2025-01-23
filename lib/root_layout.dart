@@ -1,16 +1,100 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:miles_and_more_clone/features/news/news_page.dart';
 
-class RootLayout extends StatelessWidget {
+class RootLayout extends ConsumerStatefulWidget {
   static const String routeName = '/';
   const RootLayout({Key? key}) : super(key: key);
 
   @override
+  ConsumerState<RootLayout> createState() => _RootLayoutState();
+}
+
+class _RootLayoutState extends ConsumerState<RootLayout> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = [
+    const NewsPage(),
+    const AccountPage(),
+    const AwardsPage(),
+    const CardPage(),
+    const MorePage(),
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Root Layout')),
-      body: const Center(
-        child: Text('Authenticated Area. Use the navigation bar to explore.'),
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.article),
+            label: 'News',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Account',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events),
+            label: 'Awards',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.credit_card),
+            label: 'Card',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: 'More',
+          ),
+        ],
       ),
     );
+  }
+}
+
+//TODO: make separate pages
+class AccountPage extends StatelessWidget {
+  const AccountPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Account Page'));
+  }
+}
+
+class AwardsPage extends StatelessWidget {
+  const AwardsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Awards Page'));
+  }
+}
+
+class CardPage extends StatelessWidget {
+  const CardPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Card Page'));
+  }
+}
+
+class MorePage extends StatelessWidget {
+  const MorePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('More Page'));
   }
 }

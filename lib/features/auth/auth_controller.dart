@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miles_and_more_clone/data_models/user_model.dart';
+import 'package:miles_and_more_clone/data_models/user/user_model.dart';
 import 'package:miles_and_more_clone/features/auth/auth_repository.dart';
 
 final authControllerProvider =
