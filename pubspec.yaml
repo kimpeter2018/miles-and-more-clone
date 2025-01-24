@@ -42,7 +42,8 @@ dependencies:
   google_fonts: ^6.2.1
   riverpod_lint: ^2.6.1
   cloud_firestore: ^4.17.5
-  arc_progress_bar_new: ^1.0.4
+  arc_progress_bar:
+    path: ../arc_progress_bar
 
 dev_dependencies:
   flutter_test:
