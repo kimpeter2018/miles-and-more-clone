@@ -1,4 +1,4 @@
-import 'package:arc_progress_bar_new/arc_progress_bar_new.dart';
+import 'package:arc_progress_bar/arc_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,30 +51,102 @@ class _CardsPageState extends ConsumerState<CardsPage> {
   }
 
   Widget _buildFirstCard() {
-    return const Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Qualification to Frequent Traveller"),
-          SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ArcProgressBar(
-                  percentage: 0.8,
-                  bottomCenterWidget: Text("Points"),
-                  centerWidget: Column(
-                    children: [
-                      Text("0"),
-                      Text("650"),
-                    ],
-                  )),
-            ],
-          ),
-          Divider(),
-          Text("(i) More Details"),
-        ],
+    return Card(
+      color: Theme.of(context).colorScheme.onPrimaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Qualification to Frequent Traveller"),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: ArcProgressBar(
+                      percentage: 50,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      handleSize: 0,
+                      arcThickness: 7,
+                      innerPadding: 20,
+                      strokeCap: StrokeCap.round,
+                      bottomCenterWidget: Text(
+                        "Points",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      centerWidget: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "0",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "650",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+                Expanded(
+                  child: ArcProgressBar(
+                      innerPadding: 20,
+                      percentage: 50,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      handleSize: 0,
+                      arcThickness: 7,
+                      strokeCap: StrokeCap.round,
+                      bottomCenterWidget: Text(
+                        "Qualifying Points",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      centerWidget: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "0",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "650",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+            const Divider(),
+            const Text("(i) More Details"),
+          ],
+        ),
       ),
     );
   }
