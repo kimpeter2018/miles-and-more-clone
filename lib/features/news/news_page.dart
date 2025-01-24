@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'news_controller.dart';
 
@@ -12,19 +13,19 @@ class NewsPage extends ConsumerStatefulWidget {
 
 class _NewsPageState extends ConsumerState<NewsPage> {
   bool _isChallengeExpanded = false;
-  String? _selectedMilesType; // Add state for filtering
+  String? _selectedMilesType;
 
   @override
   Widget build(BuildContext context) {
     final newsState = ref.watch(newsProvider);
-    final user = ref.watch(authControllerProvider).value;
+    final user = ref.watch(userProvider).value;
 
     return Scaffold(
       body: RefreshIndicator(
         edgeOffset: 300,
         onRefresh: () async {
           ref.refresh(newsProvider.notifier).fetchNews();
-          ref.invalidate(authControllerProvider);
+          ref.invalidate(userProvider);
         },
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
