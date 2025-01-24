@@ -3,15 +3,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
-enum Gender { mr, ms }
-
 @freezed
 class UserModel with _$UserModel {
   const factory UserModel({
     required String uid,
     required String email,
+    required int miles,
+    required int qualifyingPoints,
     required int points,
-    @JsonKey(fromJson: _genderFromJson, toJson: _genderToJson)
     required Gender gender,
     required String firstName,
     required String surName,
@@ -22,7 +21,20 @@ class UserModel with _$UserModel {
       _$UserModelFromJson(json);
 }
 
-String _genderToJson(Gender gender) => gender.toString().split('.').last;
+enum Gender {
+  @JsonValue('mr')
+  mr,
+  @JsonValue('ms')
+  ms,
+}
 
-Gender _genderFromJson(String gender) =>
-    Gender.values.firstWhere((e) => e.toString().split('.').last == gender);
+extension GenderExtension on Gender {
+  String get value {
+    switch (this) {
+      case Gender.mr:
+        return 'mr';
+      case Gender.ms:
+        return 'ms';
+    }
+  }
+}

@@ -137,7 +137,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         : null;
                     if (isEmailSubmitted && passwordController.text.isEmpty) {
                       passwordError = 'Please enter your password';
-                    } else if (passwordController.text.length < 8) {
+                    } else if (passwordController.text.isNotEmpty &&
+                        passwordController.text.length < 8) {
                       passwordError =
                           'Password needs to be longer than 8 characters';
                     } else {

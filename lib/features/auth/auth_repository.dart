@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:miles_and_more_clone/data_models/user_model.dart';
+import 'package:miles_and_more_clone/data_models/user/user_model.dart';
 
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
@@ -34,7 +34,9 @@ class AuthRepository {
           email: email,
           uid: user!.uid,
           photoUrl: user.photoURL,
+          miles: 0,
           points: 0,
+          qualifyingPoints: 0,
           gender: gender,
           firstName: firstName,
           surName: surName);
