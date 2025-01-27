@@ -72,6 +72,8 @@ flutter:
     - assets/images/welcome_page_background.jpg
     - assets/images/default_news.jpg
     - assets/images/Lufthansa_Logo.png
+    - assets/images/lounge.jpg
+    - assets/images/example_qr_code.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
