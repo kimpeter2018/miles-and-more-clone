@@ -36,8 +36,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
       final isAuthenticated = authState.value != null;
       final userLoaded = userState.value != null;
-      print('isAuthenticated: $isAuthenticated');
-      print('userLoaded: $userLoaded');
 
       final isInWelcomeFlow =
           state.matchedLocation == WelcomeScreen.routeName ||

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
-import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'news_controller.dart';
 
 class NewsPage extends ConsumerStatefulWidget {
