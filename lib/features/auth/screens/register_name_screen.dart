@@ -5,7 +5,7 @@ import 'package:miles_and_more_clone/data_models/user/user_model.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/page_indicator.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/question_mark_quide.dart';
-import 'package:miles_and_more_clone/features/welcome_screen.dart';
+import 'package:miles_and_more_clone/features/auth/screens/welcome_screen.dart';
 
 class RegisterNameScreen extends ConsumerStatefulWidget {
   final String enteredEmail;

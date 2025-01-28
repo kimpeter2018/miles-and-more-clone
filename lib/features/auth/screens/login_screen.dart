@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/password_textfield.dart';
 import 'package:miles_and_more_clone/features/auth/widgets/question_mark_quide.dart';
-import 'package:miles_and_more_clone/features/welcome_screen.dart';
+import 'package:miles_and_more_clone/features/auth/screens/welcome_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static const String routeName = '/login-screen';
