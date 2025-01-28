@@ -2,6 +2,7 @@ import 'package:arc_progress_bar/arc_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/features/card/widgets/wallet_overlay.dart';
 
 class CardsPage extends ConsumerStatefulWidget {
   const CardsPage({Key? key}) : super(key: key);
@@ -14,28 +15,60 @@ class _CardsPageState extends ConsumerState<CardsPage> {
   int _currentIndex = 0;
   final PageController _pageController = PageController(viewportFraction: 0.9);
 
+  void _openOverlayPage(BuildContext context) {
+    Navigator.of(context).push(_createOverlayRoute());
+  }
+
+  Route _createOverlayRoute() {
+    return PageRouteBuilder(
+      opaque: false,
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const WalletOverlay(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).value;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Image.asset(
-              'assets/images/Lufthansa_Logo.png',
-              height: 20,
-            ),
-          ],
-        ),
-      ),
       body: Stack(
         children: [
           ListView(
             children: [
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Image.asset(
+                    'assets/images/Lufthansa_Logo.png',
+                    height: 20,
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
               SizedBox(
                 height: screenHeight / 2.5,
                 child: PageView(
@@ -293,62 +326,66 @@ class _CardsPageState extends ConsumerState<CardsPage> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
+            child: GestureDetector(
+              onTap: () => _openOverlayPage(context),
+              child: Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6.0,
+                      spreadRadius: 2.0,
+                    ),
+                  ],
                 ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6.0,
-                    spreadRadius: 2.0,
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Serial Number",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Serial Number",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "My Servicecard",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/example_qr_code.jpg', // Replace with your QR code asset
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      Text(
-                        "My Servicecard",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
                     ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/images/example_qr_code.jpg', // Replace with your QR code asset
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
