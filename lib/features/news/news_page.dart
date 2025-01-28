@@ -276,6 +276,7 @@ class _NewsPageState extends ConsumerState<NewsPage> {
 
   Widget _buildFilterChip(String milesType) {
     return ChoiceChip(
+      labelPadding: const EdgeInsets.symmetric(horizontal: 8),
       label: Text('$milesType Miles'),
       showCheckmark: false,
       shape: RoundedRectangleBorder(
