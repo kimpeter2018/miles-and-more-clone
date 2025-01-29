@@ -71,14 +71,7 @@ class AccountPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-        child: ElevatedButton(
-            child: const Text('Log out'),
-            onPressed: () {
-              ref.read(authControllerProvider.notifier).logout();
-              Navigator.of(context).popUntil(
-                  (route) => route.settings.name == WelcomeScreen.routeName);
-            }));
+    return const Center(child: Text('Account Page'));
   }
 }
 
@@ -91,11 +84,18 @@ class AwardsPage extends StatelessWidget {
   }
 }
 
-class MorePage extends StatelessWidget {
+class MorePage extends ConsumerWidget {
   const MorePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('More Page'));
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+        child: ElevatedButton(
+            child: const Text('Log out'),
+            onPressed: () {
+              ref.read(authControllerProvider.notifier).logout();
+              Navigator.of(context).popUntil(
+                  (route) => route.settings.name == WelcomeScreen.routeName);
+            }));
   }
 }
