@@ -9,7 +9,7 @@ import 'package:miles_and_more_clone/features/util_widgets/loading_screen.dart';
 import 'package:miles_and_more_clone/root_layout.dart';
 import 'features/auth/auth_repository.dart';
 import 'features/home_screen.dart';
-import 'features/welcome_screen.dart';
+import 'features/auth/screens/welcome_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -34,10 +34,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         return GoRouter.of(context).namedLocation(ErrorScreen.routeName,
             queryParameters: {'errorMessage': userState.error.toString()});
       }
+
       final isAuthenticated = authState.value != null;
       final userLoaded = userState.value != null;
-      print('isAuthenticated: $isAuthenticated');
-      print('userLoaded: $userLoaded');
 
       final isInWelcomeFlow =
           state.matchedLocation == WelcomeScreen.routeName ||
@@ -47,8 +46,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (!isAuthenticated && !isInWelcomeFlow) {
         return WelcomeScreen.routeName;
-      } else if (isAuthenticated && !userLoaded) {
-        return LoadingScreen.routeName;
+        // } else if (isAuthenticated && !userLoaded) {
+        //   return LoadingScreen.routeName;
       } else if (isAuthenticated && userLoaded) {
         return '/';
       }

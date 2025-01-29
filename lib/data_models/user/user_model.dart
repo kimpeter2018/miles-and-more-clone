@@ -11,6 +11,7 @@ class UserModel with _$UserModel {
     required int miles,
     required int qualifyingPoints,
     required int points,
+    required String serviceCardNumber,
     required Gender gender,
     required String firstName,
     required String surName,

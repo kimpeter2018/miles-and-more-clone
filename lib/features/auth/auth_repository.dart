@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,16 +32,21 @@ class AuthRepository {
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
 
+      if (user == null) throw Exception('User creation failed.');
+
+      String uniqueSerialNumber = await _generateUniqueSerialNumber();
+
       UserModel userModel = UserModel(
           email: email,
-          uid: user!.uid,
+          uid: user.uid,
           photoUrl: user.photoURL,
           miles: 0,
           points: 0,
           qualifyingPoints: 0,
           gender: gender,
           firstName: firstName,
-          surName: surName);
+          surName: surName,
+          serviceCardNumber: uniqueSerialNumber);
 
       await _firestore
           .collection('users')
@@ -49,6 +56,27 @@ class AuthRepository {
       return userModel;
     } catch (e) {
       throw Exception('Registration failed: $e');
+    }
+  }
+
+  Future<String> _generateUniqueSerialNumber() async {
+    const int serialLength = 15;
+    Random random = Random();
+
+    while (true) {
+      String serialNumber = List.generate(
+        serialLength,
+        (_) => random.nextInt(10).toString(),
+      ).join();
+
+      final querySnapshot = await _firestore
+          .collection('users')
+          .where('serviceCardNumber', isEqualTo: serialNumber)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return serialNumber;
+      }
     }
   }
 

@@ -44,6 +44,8 @@ dependencies:
   cloud_firestore: ^4.17.5
   arc_progress_bar:
     path: ../arc_progress_bar
+  qr_flutter: ^4.1.0
+  add_to_google_wallet: ^0.0.5
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +74,12 @@ flutter:
     - assets/images/welcome_page_background.jpg
     - assets/images/default_news.jpg
     - assets/images/Lufthansa_Logo.png
+    - assets/images/lufthansa_logo_white.png
+    - assets/images/lounge.jpg
+    - assets/images/example_qr_code.jpg
+    - assets/images/miles_&_more_logo_white.png
+    - assets/images/star_alliance_logo.jpg
+    - assets/images/add_to_google_wallet_button.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

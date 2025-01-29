@@ -1,5 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
+import 'package:miles_and_more_clone/features/auth/screens/welcome_screen.dart';
+import 'package:miles_and_more_clone/features/card/cards_page.dart';
 import 'package:miles_and_more_clone/features/news/news_page.dart';
 
 class RootLayout extends ConsumerStatefulWidget {
@@ -17,7 +20,7 @@ class _RootLayoutState extends ConsumerState<RootLayout> {
     const NewsPage(),
     const AccountPage(),
     const AwardsPage(),
-    const CardPage(),
+    const CardsPage(),
     const MorePage(),
   ];
 
@@ -63,11 +66,11 @@ class _RootLayoutState extends ConsumerState<RootLayout> {
 }
 
 //TODO: make separate pages
-class AccountPage extends StatelessWidget {
+class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return const Center(child: Text('Account Page'));
   }
 }
@@ -81,20 +84,18 @@ class AwardsPage extends StatelessWidget {
   }
 }
 
-class CardPage extends StatelessWidget {
-  const CardPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Card Page'));
-  }
-}
-
-class MorePage extends StatelessWidget {
+class MorePage extends ConsumerWidget {
   const MorePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('More Page'));
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+        child: ElevatedButton(
+            child: const Text('Log out'),
+            onPressed: () {
+              ref.read(authControllerProvider.notifier).logout();
+              Navigator.of(context).popUntil(
+                  (route) => route.settings.name == WelcomeScreen.routeName);
+            }));
   }
 }
