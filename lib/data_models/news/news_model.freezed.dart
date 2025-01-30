@@ -23,6 +23,7 @@ mixin _$News {
   String? get photoUrl => throw _privateConstructorUsedError;
   String? get logoUrl => throw _privateConstructorUsedError;
   String get milesType => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
 
   /// Serializes this News to a JSON map.
@@ -43,6 +44,7 @@ abstract class $NewsCopyWith<$Res> {
       {String? photoUrl,
       String? logoUrl,
       String milesType,
+      String title,
       String description});
 }
 
@@ -64,6 +66,7 @@ class _$NewsCopyWithImpl<$Res, $Val extends News>
     Object? photoUrl = freezed,
     Object? logoUrl = freezed,
     Object? milesType = null,
+    Object? title = null,
     Object? description = null,
   }) {
     return _then(_value.copyWith(
@@ -78,6 +81,10 @@ class _$NewsCopyWithImpl<$Res, $Val extends News>
       milesType: null == milesType
           ? _value.milesType
           : milesType // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
               as String,
       description: null == description
           ? _value.description
@@ -98,6 +105,7 @@ abstract class _$$NewsImplCopyWith<$Res> implements $NewsCopyWith<$Res> {
       {String? photoUrl,
       String? logoUrl,
       String milesType,
+      String title,
       String description});
 }
 
@@ -116,6 +124,7 @@ class __$$NewsImplCopyWithImpl<$Res>
     Object? photoUrl = freezed,
     Object? logoUrl = freezed,
     Object? milesType = null,
+    Object? title = null,
     Object? description = null,
   }) {
     return _then(_$NewsImpl(
@@ -130,6 +139,10 @@ class __$$NewsImplCopyWithImpl<$Res>
       milesType: null == milesType
           ? _value.milesType
           : milesType // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
               as String,
       description: null == description
           ? _value.description
@@ -146,6 +159,7 @@ class _$NewsImpl implements _News {
       {required this.photoUrl,
       required this.logoUrl,
       required this.milesType,
+      required this.title,
       required this.description});
 
   factory _$NewsImpl.fromJson(Map<String, dynamic> json) =>
@@ -158,11 +172,13 @@ class _$NewsImpl implements _News {
   @override
   final String milesType;
   @override
+  final String title;
+  @override
   final String description;
 
   @override
   String toString() {
-    return 'News(photoUrl: $photoUrl, logoUrl: $logoUrl, milesType: $milesType, description: $description)';
+    return 'News(photoUrl: $photoUrl, logoUrl: $logoUrl, milesType: $milesType, title: $title, description: $description)';
   }
 
   @override
@@ -175,14 +191,15 @@ class _$NewsImpl implements _News {
             (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl) &&
             (identical(other.milesType, milesType) ||
                 other.milesType == milesType) &&
+            (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, photoUrl, logoUrl, milesType, description);
+  int get hashCode => Object.hash(
+      runtimeType, photoUrl, logoUrl, milesType, title, description);
 
   /// Create a copy of News
   /// with the given fields replaced by the non-null parameter values.
@@ -205,6 +222,7 @@ abstract class _News implements News {
       {required final String? photoUrl,
       required final String? logoUrl,
       required final String milesType,
+      required final String title,
       required final String description}) = _$NewsImpl;
 
   factory _News.fromJson(Map<String, dynamic> json) = _$NewsImpl.fromJson;
@@ -215,6 +233,8 @@ abstract class _News implements News {
   String? get logoUrl;
   @override
   String get milesType;
+  @override
+  String get title;
   @override
   String get description;
 
