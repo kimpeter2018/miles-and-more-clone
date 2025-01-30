@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/screens/welcome_screen.dart';
-import 'package:miles_and_more_clone/features/card/cards_page.dart';
-import 'package:miles_and_more_clone/features/news/news_page.dart';
+import 'package:miles_and_more_clone/features/card/pages/cards_page.dart';
+import 'package:miles_and_more_clone/features/news/pages/news_page.dart';
 
 class RootLayout extends ConsumerStatefulWidget {
   static const String routeName = '/';
