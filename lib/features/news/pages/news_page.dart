@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
-import 'news_controller.dart';
+import 'package:miles_and_more_clone/features/news/pages/news_detail.dart';
+import '../news_controller.dart';
 
 class NewsPage extends ConsumerStatefulWidget {
   const NewsPage({super.key});
@@ -192,68 +193,76 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final news = filteredNews[index];
-                      return Card(
-                        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            (news.photoUrl != null)
-                                ? ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                        top: Radius.zero),
-                                    child: Image.network(
-                                      news.photoUrl!,
-                                      height: 200,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewsDetailPage(news: news),
+                          ),
+                        ),
+                        child: Card(
+                          margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              (news.photoUrl != null)
+                                  ? ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(
+                                          top: Radius.zero),
+                                      child: Image.network(
+                                        news.photoUrl!,
+                                        height: 200,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(
+                                          top: Radius.zero),
+                                      child: Image.asset(
+                                        'assets/images/default_news.jpg',
+                                        height: 200,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  )
-                                : ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                        top: Radius.zero),
-                                    child: Image.asset(
-                                      'assets/images/default_news.jpg',
-                                      height: 200,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
+                              if (news.logoUrl != null)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8.0),
+                                  child: Image.network(
+                                    news.logoUrl!,
+                                    height: 60,
+                                    width: 60,
                                   ),
-                            if (news.logoUrl != null)
+                                ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 8.0),
-                                child: Image.network(
-                                  news.logoUrl!,
-                                  height: 60,
-                                  width: 60,
+                                child: Text(
+                                  news.milesType,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8.0),
-                              child: Text(
-                                news.milesType,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8.0),
+                                child: Text(
+                                  news.title,
+                                  style: const TextStyle(fontSize: 14),
+                                  textAlign: TextAlign.start,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8.0),
-                              child: Text(
-                                news.description,
-                                style: const TextStyle(fontSize: 14),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                          ],
+                              const SizedBox(height: 16),
+                            ],
+                          ),
                         ),
                       );
                     },

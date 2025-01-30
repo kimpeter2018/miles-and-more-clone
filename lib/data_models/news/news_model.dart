@@ -9,6 +9,7 @@ class News with _$News {
     required String? photoUrl,
     required String? logoUrl,
     required String milesType,
+    required String title,
     required String description,
   }) = _News;
 
