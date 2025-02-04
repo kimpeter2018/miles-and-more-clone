@@ -45,7 +45,7 @@ class LifetimePage extends ConsumerWidget {
                 padding: const EdgeInsets.all(8),
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 child: Text(
-                    "Keep earning: you still need ${30000 - user!.qualifyingPoints} Qualifying Points to become a Frequent Traveller Lifetime."),
+                    "Keep earning: you still need ${30000 - user.qualifyingPoints} Qualifying Points to become a Frequent Traveller Lifetime."),
               ),
               const SizedBox(height: 48),
               Text(

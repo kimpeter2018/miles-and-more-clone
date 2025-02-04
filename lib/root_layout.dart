@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:miles_and_more_clone/features/account/account_page.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/screens/welcome_screen.dart';
 import 'package:miles_and_more_clone/features/card/pages/cards_page.dart';
 import 'package:miles_and_more_clone/features/news/pages/news_page.dart';
+import 'package:miles_and_more_clone/points_test_page.dart';
 
 class RootLayout extends ConsumerStatefulWidget {
   static const String routeName = '/';
@@ -19,7 +21,7 @@ class _RootLayoutState extends ConsumerState<RootLayout> {
   final List<Widget> _pages = [
     const NewsPage(),
     const AccountPage(),
-    const AwardsPage(),
+    const PointsEntryPage(),
     const CardsPage(),
     const MorePage(),
   ];
@@ -66,14 +68,6 @@ class _RootLayoutState extends ConsumerState<RootLayout> {
 }
 
 //TODO: make separate pages
-class AccountPage extends ConsumerWidget {
-  const AccountPage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const Center(child: Text('Account Page'));
-  }
-}
 
 class AwardsPage extends StatelessWidget {
   const AwardsPage({super.key});
