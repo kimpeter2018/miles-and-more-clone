@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miles_and_more_clone/data_models/points/points_history_model.dart';
-import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/data_models/user/user_repository.dart';
 import 'package:miles_and_more_clone/features/auth/auth_repository.dart';
 
 class PointsEntryPage extends ConsumerStatefulWidget {

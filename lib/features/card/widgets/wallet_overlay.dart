@@ -2,7 +2,8 @@ import 'package:add_to_google_wallet/widgets/add_to_google_wallet_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:miles_and_more_clone/data_models/google_wallet_pass_string.dart';
-import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/data_models/user/user_repository.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class WalletOverlay extends ConsumerWidget {
@@ -13,7 +14,7 @@ class WalletOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider).value;
+    final user = ref.watch(authControllerProvider).value;
 
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),

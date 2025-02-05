@@ -20,6 +20,24 @@ class AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<UserModel?> getCurrentUser() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user == null) return null;
+
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(user.uid).get();
+
+      if (!userDoc.exists) {
+        throw Exception('User data not found.');
+      }
+
+      return UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
+    } catch (e) {
+      throw Exception('Failed to get current user: $e');
+    }
+  }
+
   Future<UserModel?> signUp({
     required String email,
     required String password,

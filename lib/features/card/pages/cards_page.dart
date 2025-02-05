@@ -1,7 +1,8 @@
 import 'package:arc_progress_bar/arc_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/data_models/user/user_repository.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/card/pages/lifetime_page.dart';
 import 'package:miles_and_more_clone/features/card/pages/qualification_page.dart';
 import 'package:miles_and_more_clone/features/card/widgets/benefit_info_link_card.dart';
@@ -46,7 +47,7 @@ class _CardsPageState extends ConsumerState<CardsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).value;
+    final user = ref.watch(authControllerProvider).value;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(

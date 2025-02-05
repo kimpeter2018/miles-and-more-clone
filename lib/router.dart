@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/screens/login_screen.dart';
 import 'package:miles_and_more_clone/features/auth/screens/register_name_screen.dart';
 import 'package:miles_and_more_clone/features/auth/screens/register_screen.dart';
@@ -13,30 +13,28 @@ import 'features/auth/screens/welcome_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
-  final userState = ref.watch(userProvider);
+  final userState = ref.watch(authControllerProvider.notifier);
 
   return GoRouter(
-    initialLocation: LoadingScreen.routeName,
+    initialLocation: WelcomeScreen.routeName,
     redirect: (context, state) {
-      if (authState.isLoading || userState.isLoading) {
+      print('state.matchedLocation ${state.matchedLocation}');
+
+      if (authState.isLoading) {
         return LoadingScreen.routeName;
       }
 
-      if (authState.hasError || userState.hasError) {
-        return ErrorScreen.routeName;
-      }
       if (authState.hasError) {
         return GoRouter.of(context).namedLocation(ErrorScreen.routeName,
             queryParameters: {'errorMessage': authState.error.toString()});
       }
 
-      if (userState.hasError) {
-        return GoRouter.of(context).namedLocation(ErrorScreen.routeName,
-            queryParameters: {'errorMessage': userState.error.toString()});
+      if (authState.value != null &&
+          ref.read(authControllerProvider).value == null) {
+        userState.loadUser();
       }
 
       final isAuthenticated = authState.value != null;
-      final userLoaded = userState.value != null;
 
       final isInWelcomeFlow =
           state.matchedLocation == WelcomeScreen.routeName ||
@@ -46,9 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (!isAuthenticated && !isInWelcomeFlow) {
         return WelcomeScreen.routeName;
-        // } else if (isAuthenticated && !userLoaded) {
-        //   return LoadingScreen.routeName;
-      } else if (isAuthenticated && userLoaded) {
+      } else if (isAuthenticated) {
         return '/';
       }
       return null;

@@ -1,7 +1,7 @@
 import 'package:arc_progress_bar/arc_progress_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/card/widgets/benefit_info_link_card.dart';
 
 class QualificationPage extends ConsumerStatefulWidget {
@@ -12,7 +12,7 @@ class QualificationPage extends ConsumerStatefulWidget {
 class _QualificationPageState extends ConsumerState<QualificationPage> {
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).value;
+    final user = ref.watch(authControllerProvider).value;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,

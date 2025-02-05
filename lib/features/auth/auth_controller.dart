@@ -10,7 +10,19 @@ final authControllerProvider =
 class AuthController extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository _authRepository;
 
-  AuthController(this._authRepository) : super(const AsyncValue.data(null));
+  AuthController(this._authRepository) : super(const AsyncValue.data(null)) {
+    loadUser(); // Load user when controller initializes
+  }
+
+  Future<void> loadUser() async {
+    state = const AsyncValue.loading();
+    try {
+      final user = await _authRepository.getCurrentUser(); // Fetch from repo
+      state = AsyncValue.data(user);
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
 
   Future<void> register(
       {required String email,

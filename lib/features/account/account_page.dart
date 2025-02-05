@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:miles_and_more_clone/data_models/points/points_history_model.dart';
-import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/data_models/user/user_repository.dart';
 import 'package:miles_and_more_clone/features/account/account_controller.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -13,7 +14,7 @@ class AccountPage extends ConsumerStatefulWidget {
 }
 
 class _AccountPageState extends ConsumerState<AccountPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   bool _isSearching = false;
 
@@ -40,7 +41,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).value;
+    final user = ref.watch(authControllerProvider).value;
+
     final pointsHistory = ref.watch(accountProvider);
 
     return Scaffold(
