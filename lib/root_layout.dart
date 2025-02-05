@@ -18,14 +18,6 @@ class RootLayout extends ConsumerStatefulWidget {
 class _RootLayoutState extends ConsumerState<RootLayout> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const NewsPage(),
-    const AccountPage(),
-    const PointsEntryPage(),
-    const CardsPage(),
-    const MorePage(),
-  ];
-
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -34,8 +26,17 @@ class _RootLayoutState extends ConsumerState<RootLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      NewsPage(
+        onTabChanged: _onTabTapped,
+      ),
+      const AccountPage(),
+      const PointsEntryPage(),
+      const CardsPage(),
+      const MorePage(),
+    ];
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
