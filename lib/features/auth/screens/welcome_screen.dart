@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:miles_and_more_clone/data_models/user/user_repository.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/screens/login_screen.dart';
 import 'package:miles_and_more_clone/features/auth/screens/register_screen.dart';
@@ -17,6 +18,8 @@ class WelcomeScreen extends ConsumerWidget {
     ref.listen(authControllerProvider, (previous, next) {
       next.whenOrNull(
         data: (user) {
+          print('User: $user');
+
           if (user != null) {
             context.go(RootLayout.routeName);
           }

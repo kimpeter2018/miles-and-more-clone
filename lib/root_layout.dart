@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:miles_and_more_clone/features/account/account_page.dart';
 import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 import 'package:miles_and_more_clone/features/auth/screens/welcome_screen.dart';
 import 'package:miles_and_more_clone/features/card/pages/cards_page.dart';
 import 'package:miles_and_more_clone/features/news/pages/news_page.dart';
+import 'package:miles_and_more_clone/points_test_page.dart';
 
 class RootLayout extends ConsumerStatefulWidget {
   static const String routeName = '/';
@@ -16,14 +18,6 @@ class RootLayout extends ConsumerStatefulWidget {
 class _RootLayoutState extends ConsumerState<RootLayout> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const NewsPage(),
-    const AccountPage(),
-    const AwardsPage(),
-    const CardsPage(),
-    const MorePage(),
-  ];
-
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -32,8 +26,17 @@ class _RootLayoutState extends ConsumerState<RootLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      NewsPage(
+        onTabChanged: _onTabTapped,
+      ),
+      const AccountPage(),
+      const PointsEntryPage(),
+      const CardsPage(),
+      const MorePage(),
+    ];
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
@@ -66,14 +69,6 @@ class _RootLayoutState extends ConsumerState<RootLayout> {
 }
 
 //TODO: make separate pages
-class AccountPage extends ConsumerWidget {
-  const AccountPage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const Center(child: Text('Account Page'));
-  }
-}
 
 class AwardsPage extends StatelessWidget {
   const AwardsPage({super.key});

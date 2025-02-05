@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miles_and_more_clone/data_models/user/user_provider.dart';
+import 'package:miles_and_more_clone/features/auth/auth_controller.dart';
 
 class LifetimePage extends ConsumerWidget {
   const LifetimePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider).value;
+    final user = ref.watch(authControllerProvider).value;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -45,7 +45,7 @@ class LifetimePage extends ConsumerWidget {
                 padding: const EdgeInsets.all(8),
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 child: Text(
-                    "Keep earning: you still need ${30000 - user!.qualifyingPoints} Qualifying Points to become a Frequent Traveller Lifetime."),
+                    "Keep earning: you still need ${30000 - user.qualifyingPoints} Qualifying Points to become a Frequent Traveller Lifetime."),
               ),
               const SizedBox(height: 48),
               Text(
